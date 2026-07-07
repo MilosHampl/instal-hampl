@@ -9,20 +9,28 @@ import type { FaqItemData, PageData } from "@/lib/contentful/types";
 
 const businessId = () => `${siteConfig.url.replace(/\/$/, "")}/#business`;
 
-/** LocalBusiness / Plumber — the core entity for the whole site. */
+/** LocalBusiness — plumber (services) + hardware store (retail). Core sitewide entity. */
 export function localBusinessLd() {
+  const mapQuery = encodeURIComponent(
+    `${siteConfig.name}, ${siteConfig.address.street}, ${siteConfig.address.postalCode} ${siteConfig.address.city}`,
+  );
   return {
     "@context": "https://schema.org",
-    "@type": "Plumber",
+    "@type": ["Plumber", "HardwareStore"],
     "@id": businessId(),
     name: siteConfig.name,
+    legalName: siteConfig.legalName,
     description: siteConfig.description,
     url: siteConfig.url,
     telephone: siteConfig.contact.phone,
     email: siteConfig.contact.email,
-    image: absoluteUrl("/logo.png"),
+    image: absoluteUrl("/opengraph-image"),
+    logo: absoluteUrl("/opengraph-image"),
     priceRange: "$$",
+    currenciesAccepted: "CZK",
+    paymentAccepted: "Hotově, Platební karta",
     foundingDate: siteConfig.founded,
+    hasMap: `https://www.google.com/maps?q=${mapQuery}`,
     address: {
       "@type": "PostalAddress",
       streetAddress: siteConfig.address.street,
@@ -42,7 +50,10 @@ export function localBusinessLd() {
       closes: h.closes,
     })),
     sameAs: Object.values(siteConfig.social),
-    areaServed: { "@type": "City", name: "Nymburk" },
+    areaServed: [
+      { "@type": "City", name: "Nymburk" },
+      { "@type": "AdministrativeArea", name: "okres Nymburk" },
+    ],
   };
 }
 
@@ -65,6 +76,7 @@ export function serviceLd(page: PageData) {
     "@context": "https://schema.org",
     "@type": "Service",
     name: page.title,
+    serviceType: page.title,
     description: page.seo?.metaDescription || undefined,
     url: absoluteUrl(page.slug),
     provider: { "@id": businessId() },

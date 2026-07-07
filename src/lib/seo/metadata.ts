@@ -13,7 +13,9 @@ export function buildMetadata(page: PageData | null, path: string): Metadata {
   const description = seo?.metaDescription || siteConfig.description;
   const canonical = seo?.canonicalUrl || absoluteUrl(path);
   const indexable = (page?.isIndexable ?? true) && !seo?.noIndex;
-  const ogImage = seo?.ogImage?.url;
+  // Per-page OG image if set, otherwise the sitewide generated one
+  // (app/opengraph-image). Relative URL is resolved against metadataBase.
+  const ogImage = seo?.ogImage?.url ?? "/opengraph-image";
 
   return {
     title,
@@ -30,13 +32,13 @@ export function buildMetadata(page: PageData | null, path: string): Metadata {
       siteName: siteConfig.name,
       title,
       description,
-      images: ogImage ? [{ url: ogImage }] : undefined,
+      images: [{ url: ogImage, width: 1200, height: 630, alt: title }],
     },
     twitter: {
-      card: ogImage ? "summary_large_image" : "summary",
+      card: "summary_large_image",
       title,
       description,
-      images: ogImage ? [ogImage] : undefined,
+      images: [ogImage],
     },
   };
 }
