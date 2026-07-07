@@ -7,12 +7,14 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "cf:migrate": "dotenv -e .env.local -- sh -c 'contentful space migration --space-id \"$CONTENTFUL_SPACE_ID\" --management-token \"$CONTENTFUL_MANAGEMENT_TOKEN\" --environment-id \"${CONTENTFUL_ENVIRONMENT:-master}\" model/content-model.js'"
+    "cf:migrate": "dotenv -e .env.local -- sh -c 'contentful space migration --space-id \"$CONTENTFUL_SPACE_ID\" --management-token \"$CONTENTFUL_MANAGEMENT_TOKEN\" --environment-id \"${CONTENTFUL_ENVIRONMENT:-master}\" model/content-model.js'",
+    "cf:seed": "dotenv -e .env.local -- node scripts/seed.mjs"
   },
   "dependencies": {
     "@contentful/rich-text-react-renderer": "^16.2.1",
     "@contentful/rich-text-types": "^17.2.7",
     "contentful": "^11.12.6",
+    "lucide-react": "^1.23.0",
     "next": "16.2.10",
     "react": "19.2.4",
     "react-dom": "19.2.4"
@@ -23,6 +25,7 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "contentful-cli": "^4.0.2",
+    "contentful-management": "^12.8.0",
     "dotenv-cli": "^11.0.0",
     "eslint": "^9",
     "eslint-config-next": "16.2.10",

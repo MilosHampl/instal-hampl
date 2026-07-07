@@ -5,22 +5,25 @@ import { SectionHeading } from "@/components/SectionHeading";
 import { Icon } from "@/components/Icon";
 import type { FaqData } from "@/lib/contentful/types";
 
-/** Native <details> accordion — accessible, works without JS, and pairs with FAQPage JSON-LD. */
+/** Native <details> accordion — accessible, works without JS, pairs with FAQPage JSON-LD. */
 export function Faq({ data }: { data: FaqData }) {
   if (!data.items.length) return null;
   return (
-    <section className="py-14">
+    <section className="py-20 md:py-28">
       <Container className="max-w-3xl">
-        <SectionHeading heading={data.heading ?? "Časté dotazy"} />
-        <div className="divide-y divide-line rounded-[var(--radius-card)] border border-line bg-surface">
+        <SectionHeading eyebrow="FAQ" heading={data.heading ?? "Časté dotazy"} />
+        <div className="mt-10 space-y-3">
           {data.items.map((item) => (
-            <details key={item.question} className="group px-5 py-4">
+            <details
+              key={item.question}
+              className="group rounded-2xl border border-line bg-surface px-5 py-4 transition-colors open:border-brand/40 hover:border-brand/40"
+            >
               <summary className="flex cursor-pointer list-none items-center justify-between gap-4 font-semibold text-ink">
                 {item.question}
                 <Icon
-                  name="arrow"
+                  name="chevron"
                   size={18}
-                  className="shrink-0 rotate-90 text-brand transition group-open:-rotate-90"
+                  className="shrink-0 text-brand transition-transform duration-200 group-open:rotate-180"
                 />
               </summary>
               <div className="mt-3 text-sm leading-relaxed text-muted">

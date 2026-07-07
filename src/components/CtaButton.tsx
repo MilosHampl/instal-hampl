@@ -7,12 +7,10 @@ import { mapsDirectionsUrl, siteConfig } from "@/lib/site-config";
 import { Icon } from "./Icon";
 
 /**
- * The site's single conversion primitive. Given a CTA from Contentful (or a
- * fallback), it:
- *   1. resolves the correct href for its `type` (tel:, mailto:, FB, Google
- *      Maps directions, internal route, in-page anchor),
- *   2. fires the mapped GA4 + Meta Pixel events on click (see analytics/events),
- *   3. renders a matching icon and style.
+ * The site's single conversion primitive. Resolves the correct href for the CTA
+ * `type` (tel: / mailto: / Facebook / Maps directions / route / anchor), fires
+ * the mapped GA4 + Meta Pixel events on click, and renders in the shared button
+ * idiom (press micro-interaction, hover, arrow-nudge) borrowed from tryride.
  */
 
 interface Resolved {
@@ -44,29 +42,37 @@ function resolve(cta: CtaData): Resolved {
 }
 
 const styles: Record<NonNullable<CtaData["style"]>, string> = {
-  primary: "bg-accent text-white hover:bg-accent-dark shadow-sm",
+  primary: "bg-accent text-white hover:bg-accent-dark shadow-sm shadow-accent/20",
   secondary: "bg-brand text-white hover:bg-brand-dark shadow-sm",
-  ghost: "border border-current/25 text-current hover:bg-current/5",
+  ghost: "border border-current/20 bg-transparent hover:bg-current/5",
+};
+
+const sizes = {
+  md: "h-11 px-5 text-sm",
+  lg: "h-12 px-6 text-base",
 };
 
 export function CtaButton({
   cta,
   className = "",
   fullWidth = false,
+  size = "lg",
 }: {
   cta: CtaData;
   className?: string;
   fullWidth?: boolean;
+  size?: keyof typeof sizes;
 }) {
   const { href, external, icon } = resolve(cta);
   const style = styles[cta.style ?? "secondary"];
-  const classes = `inline-flex items-center justify-center gap-2 rounded-lg px-5 py-3 text-sm font-semibold transition ${style} ${fullWidth ? "w-full" : ""} ${className}`.trim();
+  const isLink = cta.type === "link" && !external;
+  const classes = `group/cta inline-flex shrink-0 items-center justify-center gap-2 rounded-xl border border-transparent font-semibold transition-all active:translate-y-px focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-brand/40 ${style} ${sizes[size]} ${fullWidth ? "w-full" : ""} ${className}`.trim();
 
   const inner = (
     <>
       {icon && <Icon name={icon} size={18} />}
       <span>{cta.label}</span>
-      {cta.type === "link" && !external && <Icon name="arrow" size={16} />}
+      {isLink && <Icon name="arrow" size={16} className="transition-transform group-hover/cta:translate-x-0.5" />}
     </>
   );
 
@@ -84,9 +90,7 @@ export function CtaButton({
       href={href}
       className={classes}
       onClick={() => trackCta(cta)}
-      {...(external && href.startsWith("http")
-        ? { target: "_blank", rel: "noopener noreferrer" }
-        : {})}
+      {...(external && href.startsWith("http") ? { target: "_blank", rel: "noopener noreferrer" } : {})}
     >
       {inner}
     </a>

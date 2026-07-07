@@ -47,9 +47,9 @@ const options: Options = {
 export function RichTextSection({ data }: { data: RichTextData }) {
   if (!data.body) return null;
   return (
-    <section className="py-14">
+    <section className="py-20 md:py-28">
       <Container className="max-w-3xl">
-        {data.heading && <h2 className="text-2xl font-bold text-ink sm:text-3xl">{data.heading}</h2>}
+        {data.heading && <h2 className="text-balance text-3xl font-bold tracking-tight text-ink sm:text-4xl">{data.heading}</h2>}
         <div className="mt-4">{documentToReactComponents(data.body, options)}</div>
       </Container>
     </section>

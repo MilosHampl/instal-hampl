@@ -16,7 +16,7 @@ export function Header({ nav }: { nav: NavItem[] }) {
   const pathname = usePathname();
 
   return (
-    <header className="sticky top-0 z-40 border-b border-line bg-surface/90 backdrop-blur">
+    <header className="sticky top-0 z-40 border-b border-line/60 bg-surface/70 backdrop-blur-xl">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-4 px-4 sm:px-6">
         <Logo />
 
@@ -46,7 +46,7 @@ export function Header({ nav }: { nav: NavItem[] }) {
             aria-expanded={open}
             onClick={() => setOpen((o) => !o)}
           >
-            <Icon name={open ? "arrow" : "map"} size={20} />
+            <Icon name={open ? "close" : "menu"} size={20} />
           </button>
         </div>
       </div>
