@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 250 60" role="img" aria-label="instalHampl – Nymburk">
+  <!-- mark: red head + navy shoulders -->
+  <rect x="6" y="30" width="36" height="16" rx="3" fill="#1f3a93"/>
+  <circle cx="24" cy="20" r="11" fill="#d81e28"/>
+  <!-- wordmark -->
+  <text x="54" y="41" font-family="Inter, 'Segoe UI', Arial, sans-serif" font-size="32" font-weight="800" letter-spacing="-0.5">
+    <tspan fill="#d81e28">instal</tspan><tspan fill="#14224f">Hampl</tspan>
+  </text>
+</svg>

@@ -538,7 +538,12 @@ async function upsert(client, item, locale) {
   let entity;
   try {
     const existing = await client.entry.get({ entryId: item.id });
-    entity = await client.entry.update({ entryId: item.id }, { ...existing, fields });
+    // Merge over existing fields (don't replace wholesale) so fields the seed
+    // doesn't manage — e.g. images uploaded manually in Contentful — survive re-seeds.
+    entity = await client.entry.update(
+      { entryId: item.id },
+      { ...existing, fields: { ...existing.fields, ...fields } },
+    );
   } catch {
     entity = await client.entry.createWithId(
       { contentTypeId: item.contentType, entryId: item.id },
