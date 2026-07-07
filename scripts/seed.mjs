@@ -161,7 +161,7 @@ function buildHome() {
         icon: "rental",
         description: "Profesionální technika pro čištění potrubí a kanalizace.",
         bullets: ["R600 – potrubí Ø 20–150 mm", "R750 – potrubí Ø 20–200 mm", "Ruční čistička EXTOL Ø 32–50 mm"],
-        ctaLink: moreCta("/sluzby/cisteni-kanalizace"),
+        ctaLink: moreCta("/sluzby/pujcovna-stroju"),
       }),
     ],
   });
@@ -436,6 +436,71 @@ function buildKontakt() {
   });
 }
 
+function buildPujcovna() {
+  const hero = reg("hero", "hero-pujcovna", {
+    eyebrow: "Půjčovna",
+    heading: "Půjčovna strojů na čištění potrubí a kanalizace",
+    subheading:
+      "Vše, co potřebujete pro dokonalé čištění potrubí. Profesionální i ruční stroje k zapůjčení — krátkodobě i dlouhodobě, pro domácnosti i firmy.",
+    bullets: ["Profi technika Rothenberger", "Krátkodobý i dlouhodobý pronájem", "Pro domácnosti i firmy"],
+    primaryCta: callCta(),
+    secondaryCta: navigateCta(),
+  });
+
+  const grid = reg("sectionProductGrid", "sec-productgrid-pujcovna", {
+    heading: "Stroje k zapůjčení",
+    subheading: "Vyberte stroj podle průměru potrubí a rozsahu prací.",
+    products: [
+      product("pujcovna", "R 600", {
+        badge: "ROTHENBERGER",
+        description: "Výkonný stroj na čištění kanalizace.",
+        specs: ["Pro potrubí Ø 20 – 150 mm", "Elektrický pohon 230 V", "Ideální pro domácnosti"],
+      }),
+      product("pujcovna", "R 750", {
+        badge: "ROTHENBERGER",
+        description: "Výkonný stroj na čištění kanalizace.",
+        specs: ["Pro potrubí Ø 20 – 200 mm", "Elektrický pohon 230 V", "Vhodný pro domácnosti i firmy"],
+      }),
+      product("pujcovna", "Ruční čistička EXTOL Craft", {
+        badge: "RUČNÍ ČISTIČKA",
+        description: "Na menší ucpávky, rychle a bez elektřiny.",
+        specs: ["Pro potrubí Ø 32 – 50 mm", "Ruční pohon", "Snadné a rychlé použití", "Na menší ucpávky"],
+      }),
+    ],
+    cta: contactCta(),
+  });
+
+  const strip = reg("sectionFeatureStrip", "sec-featurestrip-pujcovna", {
+    internalName: "Půjčovna — výhody",
+    features: [
+      feature("Účinné čištění", "Zprůchodní potrubí i kanalizaci.", "drain"),
+      feature("Prověřená kvalita a výkon", "Značkové stroje Rothenberger.", "shield"),
+      feature("Krátkodobý i dlouhodobý pronájem", "Půjčíme na den i na týdny.", "clock"),
+      feature("Pro domácnosti i firmy", "Profi technika pro každého.", "thumbsup"),
+    ],
+  });
+
+  const banner = reg("sectionCtaBanner", "sec-ctabanner-pujcovna", {
+    heading: "Potřebujete stroj hned?",
+    text: "Zavolejte a domluvíme zapůjčení, nebo se stavte v prodejně.",
+    variant: "brand",
+    ctas: [callCta(), navigateCta()],
+  });
+
+  return reg("page", "page-pujcovna", {
+    internalName: "Půjčovna strojů",
+    title: "Půjčovna strojů na čištění kanalizace",
+    slug: "sluzby/pujcovna-stroju",
+    isIndexable: true,
+    seo: seo(
+      "pujcovna",
+      "Půjčovna strojů na čištění kanalizace Nymburk | Instalatérství Hampl",
+      "Půjčovna profesionálních strojů na čištění potrubí a kanalizace v Nymburce – Rothenberger R600, R750 a ruční čistička EXTOL. Krátkodobý i dlouhodobý pronájem.",
+    ),
+    sections: [hero, grid, strip, banner, sharedContact()],
+  });
+}
+
 function buildSiteSettings() {
   const navItem = (label, href) => reg("navItem", `nav-${slug(href)}`, { label, href });
   return reg("siteSettings", "siteSettings", {
@@ -444,6 +509,7 @@ function buildSiteSettings() {
       navItem("Úvod", "/"),
       navItem("Prodejna", "/prodejna"),
       navItem("Čištění kanalizace", "/sluzby/cisteni-kanalizace"),
+      navItem("Půjčovna", "/sluzby/pujcovna-stroju"),
       navItem("Kontakt", "/kontakt"),
     ],
     footerNote: "Rodinná firma z Nymburka od roku 1993.",
@@ -490,6 +556,7 @@ async function main() {
   buildCisteni();
   buildRevize();
   buildZamrazovani();
+  buildPujcovna();
   buildKontakt();
   buildSiteSettings();
 

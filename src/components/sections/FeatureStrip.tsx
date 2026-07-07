@@ -4,9 +4,11 @@ import type { FeatureStripData } from "@/lib/contentful/types";
 
 export function FeatureStrip({ data }: { data: FeatureStripData }) {
   if (!data.features.length) return null;
+  // 4 (or 8) tiles lay out cleanly 4-across; otherwise 3-across.
+  const lgCols = data.features.length % 4 === 0 ? "lg:grid-cols-4" : "lg:grid-cols-3";
   return (
     <section className="border-y border-line bg-surface-alt/60 py-12">
-      <Container className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+      <Container className={`grid gap-8 sm:grid-cols-2 ${lgCols}`}>
         {data.features.map((f) => (
           <div key={f.title} className="flex items-start gap-4">
             {f.icon && (
