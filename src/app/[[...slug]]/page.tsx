@@ -51,7 +51,9 @@ export default async function Page({ params }: { params: Promise<Params> }) {
   if (!page) notFound();
 
   // Structured data assembled from the page's content.
-  const structured: object[] = [breadcrumbLd(page.slug, page.title)];
+  // Skip a single-node breadcrumb on the homepage (adds no value / can be flagged).
+  const structured: object[] = [];
+  if (page.slug !== "/") structured.push(breadcrumbLd(page.slug, page.title));
   if (page.slug.startsWith("/sluzby/")) structured.push(serviceLd(page));
   const faqSection = page.sections.find((s) => s._type === "faq");
   if (faqSection && faqSection._type === "faq" && faqSection.items.length) {
