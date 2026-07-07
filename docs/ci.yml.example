@@ -1,0 +1,43 @@
+# CI workflow — copy to .github/workflows/ci.yml
+#
+# Not committed under .github/workflows/ directly because the CI token used in
+# this environment lacks the GitHub `workflow` scope. To enable: copy this file
+# to .github/workflows/ci.yml and push with a token/login that has `workflow`
+# scope (e.g. `gh auth refresh -s workflow`), or add it via the GitHub UI.
+
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    name: Lint & build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Build
+        # No Contentful/analytics secrets needed — the app builds against its
+        # static fallback content when they're absent.
+        run: npm run build
+        env:
+          NEXT_PUBLIC_SITE_URL: https://www.instal-hampl.net
