@@ -3,8 +3,8 @@ import { Icon } from "@/components/Icon";
 import { siteConfig } from "@/lib/site-config";
 import type { NavItem } from "@/lib/contentful/types";
 
-export function Footer({ nav }: { nav: NavItem[] }) {
-  const year = 2024; // static; bump on redeploy or make dynamic if desired
+export function Footer({ pages }: { pages: NavItem[] }) {
+  const year = new Date().getFullYear(); // current year (re-evaluated on build/revalidate)
   return (
     <footer className="bg-brand-dark text-white/80">
       <div className="mx-auto grid max-w-6xl gap-8 px-4 py-14 sm:px-6 md:grid-cols-4">
@@ -36,9 +36,9 @@ export function Footer({ nav }: { nav: NavItem[] }) {
         </div>
 
         <div>
-          <h2 className="mb-3 text-sm font-bold uppercase tracking-wider text-white">Rychlé odkazy</h2>
+          <h2 className="mb-3 text-sm font-bold uppercase tracking-wider text-white">Stránky</h2>
           <ul className="space-y-2 text-sm">
-            {nav.map((item) => (
+            {pages.map((item) => (
               <li key={item.href}>
                 <Link href={item.href} className="hover:underline">{item.label}</Link>
               </li>

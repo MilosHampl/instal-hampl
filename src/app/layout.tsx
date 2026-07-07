@@ -7,7 +7,7 @@ import { StickyCallBar } from "@/components/layout/StickyCallBar";
 import { Analytics } from "@/components/analytics/Analytics";
 import { ConsentBanner } from "@/components/analytics/ConsentBanner";
 import { JsonLd } from "@/components/JsonLd";
-import { getSiteSettings } from "@/lib/contentful/queries";
+import { getAllPages, getSiteSettings } from "@/lib/contentful/queries";
 import { localBusinessLd, websiteLd } from "@/lib/seo/structured-data";
 import { siteConfig } from "@/lib/site-config";
 
@@ -32,10 +32,21 @@ export const metadata: Metadata = {
     : undefined,
 };
 
+// Footer link order: home first, contact last, everything else keeps CMS order.
+const footerRank = (href: string) => (href === "/" ? 0 : href === "/kontakt" ? 99 : 50);
+
 export default async function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
-  const settings = await getSiteSettings();
+  const [settings, pages] = await Promise.all([getSiteSettings(), getAllPages()]);
+
+  // Full sitemap-style footer link list so every page (incl. the homepage) links
+  // to all important pages. Reuse curated nav labels where available.
+  const navLabel = new Map(settings.navigation.map((n) => [n.href, n.label]));
+  const footerLinks = pages
+    .filter((p) => p.isIndexable)
+    .map((p) => ({ href: p.slug, label: navLabel.get(p.slug) ?? p.breadcrumbLabel ?? p.title }))
+    .sort((a, b) => footerRank(a.href) - footerRank(b.href));
 
   return (
     <html lang="cs" className={`${inter.variable} h-full`}>
@@ -46,7 +57,7 @@ export default async function RootLayout({
         <Analytics />
         <Header nav={settings.navigation} />
         <main className="flex-1">{children}</main>
-        <Footer nav={settings.navigation} />
+        <Footer pages={footerLinks} />
 
         {/* extra bottom padding on mobile so the sticky bar never covers content */}
         <div aria-hidden className="h-16 md:hidden" />
