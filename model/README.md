@@ -6,25 +6,37 @@ code in `src/lib/contentful/normalize.ts` — keep them in sync.
 
 Human-readable spec: [`../docs/CONTENTFUL-MODEL.md`](../docs/CONTENTFUL-MODEL.md).
 
-## Apply it
+## Apply it (env-driven — recommended)
+
+`contentful-cli` + `dotenv-cli` are already devDependencies, and `cf:migrate` reads
+your local `.env.local`. So all you do is fill three values and run one command:
 
 ```bash
-# 1. Install the CLI (once)
-npm i -g contentful-cli
+# .env.local
+CONTENTFUL_SPACE_ID=xxxxxxxxxxxx
+CONTENTFUL_ENVIRONMENT=master
+CONTENTFUL_MANAGEMENT_TOKEN=CFPAT-...     # Settings → CMA tokens (personal access token)
+```
 
-# 2. Authenticate (opens a browser to grab a token)
-contentful login
-
-# 3. Select the target space
-contentful space use --space-id <YOUR_SPACE_ID>
-
-# 4. Run the migration against an environment (default: master)
-contentful space migration --environment-id master model/content-model.js
-# …or simply:
+```bash
 npm run cf:migrate
 ```
 
+This runs, under the hood:
+`dotenv -e .env.local -- contentful space migration --space-id … --management-token … --environment-id … model/content-model.js`
+
 The CLI prints the planned changes and asks for confirmation before applying.
+
+> The **management token** (`CFPAT-…`) is different from the Delivery/Preview tokens
+> the app uses to *read* content — it has read/write access to the whole space, so
+> keep it out of git (`.env.local` is gitignored).
+
+### Alternative: interactive login
+```bash
+npx contentful login                       # browser auth, stores a token
+npx contentful space use --space-id <ID>
+npx contentful space migration --environment-id master model/content-model.js
+```
 
 ## Notes
 - **First run only.** The migration uses `createContentType` — re-running errors

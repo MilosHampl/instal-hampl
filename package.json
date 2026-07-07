@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "cf:migrate": "contentful space migration --environment-id ${CONTENTFUL_ENVIRONMENT:-master} model/content-model.js"
+    "cf:migrate": "dotenv -e .env.local -- sh -c 'contentful space migration --space-id \"$CONTENTFUL_SPACE_ID\" --management-token \"$CONTENTFUL_MANAGEMENT_TOKEN\" --environment-id \"${CONTENTFUL_ENVIRONMENT:-master}\" model/content-model.js'"
   },
   "dependencies": {
     "@contentful/rich-text-react-renderer": "^16.2.1",
@@ -22,6 +22,8 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "contentful-cli": "^4.0.2",
+    "dotenv-cli": "^11.0.0",
     "eslint": "^9",
     "eslint-config-next": "16.2.10",
     "tailwindcss": "^4",
